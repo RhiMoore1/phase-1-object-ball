@@ -208,21 +208,23 @@ console.log(playerNumbers('Brooklyn Nets'))
 // returns a object of that player's stats
 
 function playerStats(playerName) {
+
+    const players = allPlayers();
+    const player = players[playerName];
     const statsArray = [];
  
-     statsArray.push(`number: ` + (allPlayers()[playerName].number));
-     statsArray.push(`shoe: ` + (allPlayers()[playerName].shoe));
-     statsArray.push(`points: ` + (allPlayers()[playerName].points));
-     statsArray.push(`rebounds: ` + (allPlayers()[playerName].rebounds));
-     statsArray.push(`assists: ` + (allPlayers()[playerName].assists));
-     statsArray.push(`steals: ` + (allPlayers()[playerName].steals));
-     statsArray.push(`blocks: ` + (allPlayers()[playerName].blocks));
-     statsArray.push(`slamDunks: ` + (allPlayers()[playerName].slamDunks));
-     return console.log(statsArray)
-     
-     //return playerStats()
+    return {
+        name: playerName,
+        number: player.number,
+        shoe: player.shoe,
+        points: player.points,
+        rebounds: player.rebounds,
+        assists: player.assists,
+        steals: player.steals,
+        blocks: player.blocks,
+        slamDunks: player.slamDunks,
+    };
 }
-
 console.log(playerStats('Brendan Haywood'))
 
 
