@@ -117,102 +117,85 @@ function gameObject() {
     }
 }
 
-// build a function that returns the name of the home team
-function homeTeamName() {
-    let object = gameObject();
-    return object['home']['teamName'];
-}
-console.log(homeTeamName());
+/////////////////////////////////////////////////////////
+// Globally declared variables 
+/////////////////////////////////////////////////////////
 
-// Build a function, numPointsScored 
-// that takes in an argument of a player's name
-// and returns the number of points scored for that player
-// uses HELPER FUNCTION allPlayers()
+// game object
+const game = gameObject();
+
+// players 
+const homePlayers = game.home.players;
+const awayPlayers = game.away.players;
+const allPlayers = {...homePlayers, ...awayPlayers};
+
+// teams
+const homeTeamName = game.home.teamName;
+const awayTeamName = game.away.teamName;
+const teamNamesArr = [homeTeamName, awayTeamName];
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
+
+
+// NUMBER POINTS SCORED
 function numPointsScored(playerName) {
-    return allPlayers()[playerName].points;
+    return allPlayers[playerName].points;
 }
-console.log(numPointsScored('Jeff Adrien'));
+console.log(numPointsScored('Ben Gordon'));
 
 
-
-
-// Build a function, shoeSize 
-// that takes in an argument of a player's name
-// and returns the shoe size for that player
+// SHOE SIZE
 function shoeSize(playerName) {
-    return allPlayers()[playerName].shoe;
+    return allPlayers[playerName].shoe;
 }
-console.log(shoeSize('Brendan Haywood'))
+console.log(shoeSize('Ben Gordon'))
 
 
-
-
-// Build a function, teamColors
-// that takes in an argument of the team name
-// and returns an array of that teams colors
+// TEAM COLORS
 function teamColors(teamName) {
-    if(teamName === 'Brooklyn Nets') {
-        return gameObject().home.colors;
-    } else if(teamName === 'Charlotte Hornets') {
-        return gameObject().away.colors;
+    if(teamName === game.home.teamName) {
+        return game.home.colors
+    } else if(teamName === game.away.teamName){
+        return game.away.colors
     } else {
-        return 'The team does not exist'
+        return 'not a listed team'
     }
 }
+console.log(teamColors('Charlotte Hornets')); 
 console.log(teamColors('Brooklyn Nets'));
 
 
-
-
-// Build a function, teamNames
-// that operates on the game object to
-// returns an array of team names
-function teamName() {
-    return teamArray();
+// TEAM NAMES
+function teamNames() {
+    return teamNamesArr;
 }
-console.log(teamName())
+console.log(teamNames());
 
 
-
-
-// Build a function, playerNumbers
-//  that takes in an argument of a team name and 
-// returns an array of the jersey number's for that team
+// PLAYER NUMBERS
 function playerNumbers(teamName) {
-    const game = gameObject();
-    const homePlayers = game.home.players;
-    const awayPlayers = game.home.players;
-    const nums = [];
-
+    let nums = [];
     if(teamName === game.home.teamName) {
         for(let player in homePlayers) {
             nums.push(homePlayers[player].number);
         }
-    } else if(teamName === game.away.teamName) {
+    }else if(teamName === game.away.teamName) {
         for(let player in awayPlayers) {
-            nums.push(awayPlayers[player].number);
+            nums.push(awayPlayers[player].points)
         }
-    } else {
-        return 'Team is not an option'
     }
     return nums;
 }
-console.log(playerNumbers('Brooklyn Nets'))
+console.log(playerNumbers('Charlotte Hornets'));
 
 
-
-
-
-// Build a function, playerStats
-// that takes in an argument of a player's name and 
-// returns a object of that player's stats
-
+// PLAYER STATS
 function playerStats(playerName) {
-
-    const players = allPlayers();
+    const stats = [];
+    const players = allPlayers;
     const player = players[playerName];
-    const statsArray = [];
- 
     return {
         name: playerName,
         number: player.number,
@@ -225,55 +208,79 @@ function playerStats(playerName) {
         slamDunks: player.slamDunks,
     };
 }
-console.log(playerStats('Brendan Haywood'))
+console.log(playerStats('Mason Plumlee'))
 
 
+// BIG SHOE REBOUNDS
 
+function bigShoeRebounds() {
+    let largestShoeSize = 0;
+    let playerWithLargestShoeSize;
 
-
-
-
-
-
-
-    // for(let player in allPlayers) {
-    //     nums.push(allPlayers[player].number)
-    //     return nums
-    // }
-    // allPlayers()[playerName].number;
-    // allPlayers()[playerName].points;
-    // allPlayers()[playerName].shoes;
-    // allPlayers()[playerName].rebounds;
-    // allPlayers()[playerName].assists;
-    // allPlayers()[playerName].steals;
-    // allPlayers()[playerName].blocks;
-    // allPlayers()[playerName].slamDunks;
-    // return allPlayers(playerName);
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////
-// HELPER FUNCTION
-/////////////////////////////////////////////////////////////////
-function allPlayers() {
-    // return an object that returns all players for both teams
-    const homePlayers = gameObject().home.players;
-    const awayPlayers = gameObject().away.players;
-    const allPlayers = {...homePlayers, ...awayPlayers};
-    return allPlayers;
+    for (const playerName in allPlayers) {
+        const player = allPlayers[playerName];
+        if(player.shoe > largestShoeSize) {
+            largestShoeSize = player.shoe;
+            playerWithLargestShoeSize = player;
+        }
+    }
+    return playerWithLargestShoeSize.rebounds;
 }
+console.log(bigShoeRebounds())
 
-//////////////////////////////////////////////////////////////////
-// HELPER FUNCTION
-/////////////////////////////////////////////////////////////////
-function teamArray() {
-    const teamArray = [];
-    teamArray.push(gameObject().home.teamName);
-    teamArray.push(gameObject().away.teamName);
-    return teamArray;
+
+// MOST POINTS
+
+function mostPointsScored() {
+    let mostPoints = 0;
+    let playerWithMostPoints;
+
+    for(const playerName in allPlayers) {
+        const player = allPlayers[playerName];
+        if(player.points > mostPoints) {
+            mostPoints = player.points;
+            playerWithMostPoints = player;
+        }
+    }
+    return playerWithMostPoints.points;
 }
+console.log(mostPointsScored())
+
+
+// HOME TEAM POINTS
+
+function homeTeamPoints() {
+    let homePoints = 0;
+    for(let playerName in homePlayers) {
+        const player = homePlayers[playerName];
+        homePoints += player.points
+    }
+    return homePoints;
+}
+console.log(homeTeamPoints())
+
+
+// AWAY TEAM POINTS
+
+function awayTeamPoints() {
+    let awayPoints = 0;
+    for(let playerName in awayPlayers) {
+        const player = awayPlayers[playerName];
+        awayPoints += player.points;
+    }
+    return awayPoints;
+}
+console.log(awayTeamPoints())
+
+
+// WINNING TEAM 
+function winningTeam() {
+    let winningTeam;
+    if(homeTeamPoints() > awayTeamPoints()) {
+        winningTeam = game.home.teamName;
+    }else if(awayTeamPoints() > homeTeamPoints()) {
+        winningTeam = away.team.teamName;
+    }
+    return winningTeam;
+}
+console.log(winningTeam())
